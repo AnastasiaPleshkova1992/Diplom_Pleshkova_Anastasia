@@ -16,7 +16,7 @@ router = APIRouter(tags=['Auth'])
 async def auth_user(response: Response,
                     user_data: LoginModel,
                     session: AsyncSession = Depends(db_helper.session_getter)):
-    """После успешного входа в систему необходимо установить Cookies для пользователя"""
+    """После успешного входа в систему устанавливаются Cookies для пользователя"""
     check = await authenticate_user(session=session, login=user_data.login, password=user_data.password)
     if check is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
@@ -26,7 +26,9 @@ async def auth_user(response: Response,
     return check
 
 
-@router.post("/logout")
+@router.post("/logout",
+             summary="Выход из системы")
 async def logout_user(response: Response):
+    """После выхода из системы удаляются Cookies для пользователя"""
     response.delete_cookie(key="users_access_token")
     return {'message': 'Пользователь успешно вышел из системы'}
