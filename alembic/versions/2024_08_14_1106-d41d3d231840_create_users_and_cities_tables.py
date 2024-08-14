@@ -1,8 +1,8 @@
 """create users and cities tables
 
-Revision ID: 366e28991d0e
+Revision ID: d41d3d231840
 Revises: 
-Create Date: 2024-08-14 10:02:11.292595
+Create Date: 2024-08-14 11:06:06.931994
 
 """
 
@@ -13,7 +13,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = "366e28991d0e"
+revision: str = "d41d3d231840"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -31,6 +31,7 @@ def upgrade() -> None:
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("login", sa.String(), nullable=True),
         sa.Column("password", sa.String(), nullable=True),
+        sa.Column("email", sa.String(), nullable=True),
         sa.Column("first_name", sa.String(), nullable=True),
         sa.Column("last_name", sa.String(), nullable=True),
         sa.Column("other_name", sa.String(), nullable=True),
