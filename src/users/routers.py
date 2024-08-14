@@ -5,7 +5,7 @@ from src import db_helper, User
 from src.users.schemas import CurrentUserResponseModel
 from src.users.service import get_current_user
 
-router = APIRouter(prefix='/users', tags=['user'])
+router = APIRouter(prefix="/users", tags=["user"])
 
 # @router.patch('/current',
 #               summary='Изменение данных пользователя',
@@ -17,16 +17,17 @@ router = APIRouter(prefix='/users', tags=['user'])
 #     return await edit_user(user_edit=user_edit, session=session)
 
 
-@router.get('/current',
-            summary='Получение данных о текущем пользователе',
-            response_model=CurrentUserResponseModel)
-async def current_user(request: Request,
-                       session: AsyncSession = Depends(db_helper.session_getter)):
+@router.get(
+    "/current",
+    summary="Получение данных о текущем пользователе",
+    response_model=CurrentUserResponseModel,
+)
+async def current_user(
+    request: Request, session: AsyncSession = Depends(db_helper.session_getter)
+):
     """Здесь находится вся информация, доступная пользователю о самом себе,
     а так же информация является ли он администратором"""
     return await get_current_user(session=session, request=request)
-
-
 
 
 #
