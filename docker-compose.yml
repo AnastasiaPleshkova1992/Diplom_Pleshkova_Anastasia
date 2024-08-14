@@ -1,0 +1,10 @@
+services:
+
+  pg:
+    image: postgres
+    environment:
+      POSTGRES_DB: users_api_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: QAZplm6882
+    ports:
+      - "5432:5432"
