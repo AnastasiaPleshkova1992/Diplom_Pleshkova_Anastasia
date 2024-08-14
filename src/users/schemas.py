@@ -19,7 +19,7 @@ class CurrentUserResponseModel(BaseModel):
     email: str | None = Field(title='Email')
     phone: str | None = Field(title='Phone')
     birthday: str | None = Field(title='Birthday', format='%Y-%m-%d')
-    is_admin: bool | None = Field(title='Is Admin')
+    is_admin: bool | None = Field(title='Is Admin', default=False)
 
 
 class UpdateUserResponseModel(BaseModel):
