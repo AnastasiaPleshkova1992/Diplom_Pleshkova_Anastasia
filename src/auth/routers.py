@@ -26,7 +26,7 @@ async def auth_user(response: Response,
     return check
 
 
-@router.post("/logout/")
+@router.post("/logout")
 async def logout_user(response: Response):
     response.delete_cookie(key="users_access_token")
     return {'message': 'Пользователь успешно вышел из системы'}
