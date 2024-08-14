@@ -25,6 +25,11 @@ class DatabaseConfig(BaseModel):
     }
 
 
+class AuthConfig(BaseModel):
+    secret_key: str
+    algorithm: str
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         case_sensitive=False,
@@ -34,7 +39,12 @@ class Settings(BaseSettings):
     )
     run: RunConfig = RunConfig()
     db: DatabaseConfig
+    auth: AuthConfig
     title: str = 'User_Management_FastAPI_Application'
 
 
 settings = Settings()
+
+
+def get_auth_data():
+    return {"secret_key": settings.auth.secret_key, "algorithm": settings.auth.algorithm}
