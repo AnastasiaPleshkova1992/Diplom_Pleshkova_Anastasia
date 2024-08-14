@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 
-from fastapi import HTTPException, status, Request
+from fastapi import HTTPException, status
 from jose import jwt
 from passlib.context import CryptContext
 from sqlalchemy import select
@@ -13,12 +13,12 @@ from src.config import get_auth_data
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-def get_password_hash(password: str) -> str:
-    return pwd_context.hash(password)
-
-
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)
+# def get_password_hash(password: str) -> str:
+#     return pwd_context.hash(password)
+#
+#
+# def verify_password(plain_password: str, hashed_password: str) -> bool:
+#     return pwd_context.verify(plain_password, hashed_password)
 
 
 def create_access_token(data: dict) -> str:
@@ -40,6 +40,9 @@ async def get_user_by_login(session: AsyncSession, login: str) -> Optional[User]
 
 async def authenticate_user(session: AsyncSession, login: str, password: str):
     user = await get_user_by_login(session=session, login=login)
-    # if not user or verify_password(plain_password=password, hashed_password=user.password) is False:
-    #     return None
-    return user
+    if user.password == password:
+        return user
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Incorrect password"
+        )
