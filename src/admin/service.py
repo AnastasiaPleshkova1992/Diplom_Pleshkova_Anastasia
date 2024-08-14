@@ -7,16 +7,16 @@ from src.admin.schemas import PrivateCreateUserModel, PrivateUpdateUserModel
 from src.users.service import get_user_by_id
 
 
-async def get_users(session: AsyncSession):
+async def get_users(session: AsyncSession, page: int, size: int):
     query = select(User)
     users = await session.execute(query)
-    return users.scalars().all()
+    return users.scalars().all()[page: size + page]
 
 
 async def get_cities(session: AsyncSession):
     query = select(City)
-    cities = await session.execute(query)
-    return cities.all()
+    # cities = await session.execute(query)
+    return query
 
 
 async def create_user(session: AsyncSession, user_create: PrivateCreateUserModel):
@@ -28,7 +28,7 @@ async def create_user(session: AsyncSession, user_create: PrivateCreateUserModel
 
 
 async def update_user(
-    session: AsyncSession, pk: int, user_update: PrivateUpdateUserModel
+        session: AsyncSession, pk: int, user_update: PrivateUpdateUserModel
 ):
     query = update(User).where(User.id == pk).values(**user_update.model_dump())
     try:
