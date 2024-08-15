@@ -37,16 +37,14 @@ async def private_users_get(
     request: Request = Request,
 ): #Добавить -> PrivateUsersListResponseModel если получится реализовать
     """Здесь находится вся информация, доступная пользователю о других пользователях"""
-    result = await get_current_admin_user(session=session, request=request)
-    if result:
-        print("Cool")
+    await get_current_admin_user(session=session, request=request)
     users_list = await get_users(session=session, page=page, size=size)
-    # cities_list = await get_cities(session=session)
-    # total = users_list[0] if len(users_list) == 1 else users_list
-    return users_list
-    # return {"data": users_list,
-    #         "meta": {"pagination": {"total": total, "page": page, "size": size},
-    #                  "hint": {"city": cities_list}}}
+    cities_list = await get_cities(session=session)
+    total = len(users_list)
+    pagination = {"total": total, "page": page, "size": size}
+    return {"data": users_list,
+            "meta": {"pagination": pagination,
+                     "hint": {"city": cities_list}}}
 
 
 @router.post(
@@ -61,9 +59,7 @@ async def private_users_post(
     request: Request = Request,
 ) -> PrivateDetailUserResponseModel:
     """Здесь возможно занести в базу нового пользователя с минимальной информацией о нем"""
-    result = await get_current_admin_user(session=session, request=request)
-    if result:
-        print("Cool")
+    await get_current_admin_user(session=session, request=request)
     return await create_user(session=session, user_create=user_create)
 
 
@@ -79,9 +75,7 @@ async def private_users__pk__get(
     request: Request = Request,
 ) -> PrivateDetailUserResponseModel:
     """Здесь администратор может увидеть всю существующую пользовательскую информацию"""
-    result = await get_current_admin_user(session=session, request=request)
-    if result:
-        print("Cool")
+    await get_current_admin_user(session=session, request=request)
     user = await get_user_by_id(session=session, pk=pk)
     return user
 
