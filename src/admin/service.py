@@ -21,7 +21,7 @@ async def get_current_admin_user(session: AsyncSession, request: Request):
 async def get_users(session: AsyncSession, page: int, size: int):
     query = select(User)
     users = await session.execute(query)
-    return users.scalars().all()[page : size + page]
+    return users.scalars().all()[page: size + page]
 
 
 async def get_cities(session: AsyncSession):
