@@ -33,16 +33,16 @@ class UpdateUserResponseModel(BaseModel):
 
 
 class UsersListElementModel(BaseModel):
-    id: int = Field(title='Id')
-    first_name: str = Field(title='First Name')
-    last_name: str = Field(title='Last Name')
-    email: str = Field(title='Email')
+    id: int | None = Field(title='Id')
+    first_name: str | None = Field(title='First Name')
+    last_name: str | None = Field(title='Last Name')
+    email: str | None = Field(title='Email')
 
 
 class UsersListMetaDataModel(BaseModel):
-    pagination: PaginatedMetaDataModel
+    pagination: PaginatedMetaDataModel | None
 
 
 class UsersListResponseModel(BaseModel):
-    data: UsersListElementModel = Field(title='Data')
-    meta: UsersListMetaDataModel
+    data: UsersListElementModel | None = Field(title='Data')
+    meta: UsersListMetaDataModel | None

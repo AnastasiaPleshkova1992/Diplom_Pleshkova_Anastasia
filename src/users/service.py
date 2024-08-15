@@ -11,7 +11,7 @@ from src.config import get_auth_data
 from src.users.schemas import UpdateUserModel
 
 
-async def get_user_by_id(session: AsyncSession, pk: int) -> Optional[User]:
+async def get_user_by_id(session: AsyncSession, pk: int) -> [User]:
     stmt = select(User).filter(User.id == pk)
     user = await session.scalars(stmt)
     return user.first()

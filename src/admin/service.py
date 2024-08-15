@@ -26,8 +26,8 @@ async def get_users(session: AsyncSession, page: int, size: int):
 
 async def get_cities(session: AsyncSession):
     query = select(City)
-    # cities = await session.execute(query)
-    return query
+    cities = await session.execute(query)
+    return cities.scalars().all()
 
 
 async def create_user(session: AsyncSession, user_create: PrivateCreateUserModel):

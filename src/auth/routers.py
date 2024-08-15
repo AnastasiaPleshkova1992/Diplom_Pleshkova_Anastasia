@@ -33,7 +33,10 @@ async def login(
     return check
 
 
-@router.post("/logout", status_code=200)
+@router.post(
+    "/logout",
+    summary="Выход из системы",
+    status_code=200)
 async def logout(response: Response):
     response.delete_cookie(key="users_access_token")
     return {"message": "Пользователь успешно вышел из системы"}
