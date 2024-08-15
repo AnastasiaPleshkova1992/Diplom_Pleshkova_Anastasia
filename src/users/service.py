@@ -58,9 +58,9 @@ async def get_current_user(session: AsyncSession, request: Request):
     return user
 
 
-async def update_user(session: AsyncSession,
-                      user_update: UpdateUserModel,
-                      request: Request):
+async def update_user(
+    session: AsyncSession, user_update: UpdateUserModel, request: Request
+):
     query = update(User).values(**user_update.model_dump())
     try:
         await session.execute(query)
