@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src import db_helper
+from src import db_helper, User
 from src.admin.service import get_users
 from src.pagination import PaginatedMetaDataModel
 from src.users.schemas import (
@@ -23,7 +23,7 @@ router = APIRouter(prefix="/users", tags=["user"])
 )
 async def current_user(
     request: Request, session: AsyncSession = Depends(db_helper.session_getter)
-) -> CurrentUserResponseModel:
+):
     """Здесь находится вся информация, доступная пользователю о самом себе,
     а так же информация является ли он администратором"""
     return await get_current_user(session=session, request=request)
@@ -39,7 +39,7 @@ async def edit_user(
     request: Request,
     user_update: UpdateUserModel,
     session: AsyncSession = Depends(db_helper.session_getter),
-) -> UpdateUserResponseModel:
+):
     """Здесь пользователь имеет возможность изменить свои данные"""
     await get_current_user(session=session, request=request)
     return await update_user(user_update=user_update, session=session, request=request)
@@ -53,11 +53,10 @@ async def edit_user(
 )
 async def users(
     page: int, size: int, session: AsyncSession = Depends(db_helper.session_getter)
-): #Добавить -> UsersListResponseModel если получится реализовать
+):
     """Здесь находится вся информация, доступная пользователю о других пользователях"""
     users_list = await get_users(session=session, page=page, size=size)
     total = len(users_list)
-    # pagination = {"total": total, "page": page, "size": size}
-    return users_list
-    # return {"data": users_list,
-    #         "meta": {"pagination": {"total": total, "page": page, "size": size}}}
+    pagination = {"total": total, "page": page, "size": size}
+    return {"data": users_list,
+            "meta": {"pagination": pagination}}
