@@ -1,12 +1,12 @@
 from datetime import datetime, timezone
 from typing import Optional
 
-from fastapi import Request, HTTPException, status, Depends
+from fastapi import Request, HTTPException, status
 from jose import jwt, JWTError
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.users.models import User, City
+from src.users.models import User
 from src.config import get_auth_data
 from src.users.schemas import UpdateUserModel
 
