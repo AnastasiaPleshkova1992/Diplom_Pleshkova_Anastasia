@@ -1,13 +1,14 @@
 from datetime import datetime, timezone
 from typing import Optional
 
-from fastapi import Request, HTTPException, status
+from fastapi import Request, HTTPException, status, Depends
 from jose import jwt, JWTError
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.users.models import User, City
 from src.config import get_auth_data
+from src.users.schemas import UpdateUserModel
 
 
 async def get_user_by_id(session: AsyncSession, pk: int) -> Optional[User]:
@@ -55,3 +56,19 @@ async def get_current_user(session: AsyncSession, request: Request):
         )
 
     return user
+
+
+async def update_user(session: AsyncSession,
+                      user_update: UpdateUserModel,
+                      request: Request):
+    query = update(User).values(**user_update.model_dump())
+    try:
+        await session.execute(query)
+        await session.commit()
+    except Exception as e:
+        print(e)
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid data"
+        )
+    result = await get_current_user(session, request)
+    return result
