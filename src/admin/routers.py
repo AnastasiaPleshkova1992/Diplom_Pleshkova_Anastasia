@@ -35,7 +35,7 @@ async def private_users_get(
     size: int,
     session: AsyncSession = Depends(db_helper.session_getter),
     request: Request = Request,
-):
+): #Добавить -> PrivateUsersListResponseModel если получится реализовать
     """Здесь находится вся информация, доступная пользователю о других пользователях"""
     result = await get_current_admin_user(session=session, request=request)
     if result:
@@ -77,7 +77,7 @@ async def private_users__pk__get(
     pk: int,
     session: AsyncSession = Depends(db_helper.session_getter),
     request: Request = Request,
-):
+) -> PrivateDetailUserResponseModel:
     """Здесь администратор может увидеть всю существующую пользовательскую информацию"""
     result = await get_current_admin_user(session=session, request=request)
     if result:
@@ -110,7 +110,7 @@ async def private_users__pk__patch(
     user_update: PrivateUpdateUserModel,
     session: AsyncSession = Depends(db_helper.session_getter),
     request: Request = Request,
-):
+) -> PrivateDetailUserResponseModel:
     """Здесь администратор может изменить любую информацию о пользователе"""
     result = await get_current_admin_user(session=session, request=request)
     if result:
