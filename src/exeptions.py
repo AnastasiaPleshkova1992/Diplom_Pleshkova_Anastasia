@@ -1,22 +1,16 @@
-from fastapi import HTTPException
+from pydantic import BaseModel
 
 
-class ErrorResponseModel(Exception):
-    """status_code:400,
-    description: Bad Request"""
+class ExceptionResponseModel(Exception):
     def __init__(self, code, message):
         self.code = code
         self.message = message
 
 
-class CodelessErrorResponseModel(Exception):
-    """status_code: 401,
-    description: Unauthorized
-    status_code: 403,
-    description: Forbidden
-    status_code: 404,
-    description: Not Found
-    """
-    def __init__(self, code, message):
-        self.code = code
-        self.message = message
+class ErrorResponseModel(BaseModel):
+    code: int
+    message: str
+
+
+class CodelessErrorResponseModel(BaseModel):
+    message: str
