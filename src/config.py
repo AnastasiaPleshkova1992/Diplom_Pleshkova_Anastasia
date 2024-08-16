@@ -34,7 +34,6 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         case_sensitive=False,
         env_nested_delimiter='__',
-        env_prefix='APP_CONFIG__',
         env_file=f'{os.path.dirname(os.path.abspath(__file__))}/../.env',
     )
     run: RunConfig = RunConfig()
