@@ -1,5 +1,3 @@
-from typing import TypeVar
-
 from fastapi import Query
 from fastapi_pagination import Params
 
