@@ -47,7 +47,7 @@ async def private_users_get(
     pagination = {"total": total, "page": page, "size": size}
     return {
         "data": users_list,
-        "meta": [{"pagination": pagination, "hint": cities_list}]}
+        "meta": [{"pagination": pagination, "hint": {"city": cities_list}}]}
 
 
 @router.post(

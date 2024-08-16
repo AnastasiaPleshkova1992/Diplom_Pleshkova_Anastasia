@@ -57,7 +57,7 @@ class PrivateUsersListHintMetaModel(BaseModel):
 
 class PrivateUsersListMetaDataModel(BaseModel):
     pagination: PaginatedMetaDataModel = Body(...)
-    hint: List[CitiesHintModel] = Body(...)
+    hint: PrivateUsersListHintMetaModel = Body(...)
 
 
 class PrivateUsersListResponseModel(BaseModel):
