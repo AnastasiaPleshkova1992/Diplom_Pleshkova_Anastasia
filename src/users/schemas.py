@@ -12,7 +12,7 @@ class UpdateUserModel(BaseModel):
     other_name: str | None = Field(title='Other Name')
     email: str | None = Field(title='Email')
     phone: str | None = Field(title='Phone')
-    birthday: str | None = Field(title='Birthday', format='%Y-%m-%d')
+    birthday: str | None = Field(title='Birthday', format='date')
 
 
 class CurrentUserResponseModel(BaseModel):
@@ -21,7 +21,7 @@ class CurrentUserResponseModel(BaseModel):
     other_name: str | None = Field(title='Other Name')
     email: str | None = Field(title='Email')
     phone: str | None = Field(title='Phone')
-    birthday: str | None = Field(title='Birthday', format='%Y-%m-%d')
+    birthday: str | None = Field(title='Birthday', format='date')
     is_admin: bool | None = Field(title='Is Admin', default=False)
 
 
@@ -32,7 +32,7 @@ class UpdateUserResponseModel(BaseModel):
     other_name: str = Field(title='Other Name')
     email: str = Field(title='Email')
     phone: str = Field(title='Phone')
-    birthday: str = Field(title='Birthday', format='%Y-%m-%d')
+    birthday: str = Field(title='Birthday', format='date')
 
 
 class UsersListElementModel(BaseModel):
