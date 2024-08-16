@@ -9,8 +9,7 @@ from src.exeptions import ErrorResponseModel, CodelessErrorResponseModel
 from src.users.schemas import (
     CurrentUserResponseModel,
     UpdateUserResponseModel,
-    UpdateUserModel,
-    # UsersListResponseModel,
+    UpdateUserModel, UsersListResponseModel,
 )
 from src.users.service import get_current_user, update_user
 
@@ -56,7 +55,7 @@ async def edit_user(
 
 @router.get(
     "",
-    # response_model=UsersListResponseModel,
+    response_model=UsersListResponseModel,
     summary="Постраничное получение кратких данных обо всех пользователях",
     responses={
         400: {"model": ErrorResponseModel},
@@ -74,4 +73,4 @@ async def users(
     users_list = await get_users(session=session, page=page, size=size)
     total = len(users_list)
     pagination = {"total": total, "page": page, "size": size}
-    return {"data": users_list, "meta": {"pagination": pagination}}
+    return {"data": users_list, "meta": [{"pagination": pagination}]}

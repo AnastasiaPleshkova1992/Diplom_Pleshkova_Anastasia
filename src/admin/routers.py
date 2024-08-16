@@ -31,7 +31,7 @@ router = APIRouter(prefix="/private/users", tags=["admin"])
         401: {"model": CodelessErrorResponseModel},
         403: {"model": CodelessErrorResponseModel},
     },
-    # response_model=PrivateUsersListResponseModel
+    response_model=PrivateUsersListResponseModel
 )
 async def private_users_get(
     page: int,
@@ -47,8 +47,7 @@ async def private_users_get(
     pagination = {"total": total, "page": page, "size": size}
     return {
         "data": users_list,
-        "meta": {"pagination": pagination, "hint": {"city": cities_list}},
-    }
+        "meta": [{"pagination": pagination, "hint": cities_list}]}
 
 
 @router.post(

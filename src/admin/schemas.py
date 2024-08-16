@@ -1,3 +1,6 @@
+from typing import List
+
+from fastapi import Body
 from pydantic import BaseModel, Field
 
 from src.pagination import PaginatedMetaDataModel
@@ -49,14 +52,14 @@ class CitiesHintModel(BaseModel):
 
 
 class PrivateUsersListHintMetaModel(BaseModel):
-    city: CitiesHintModel = Field(title='City')
+    city: List[CitiesHintModel] = Body(title='City')
 
 
 class PrivateUsersListMetaDataModel(BaseModel):
-    pagination: PaginatedMetaDataModel
-    hint: CitiesHintModel
+    pagination: PaginatedMetaDataModel = Body(...)
+    hint: List[CitiesHintModel] = Body(...)
 
 
 class PrivateUsersListResponseModel(BaseModel):
-    data: UsersListElementModel = Field(title='Data')
-    meta: PrivateUsersListMetaDataModel = Field(title='Meta')
+    data: List[UsersListElementModel] = Body(title='Data')
+    meta: List[PrivateUsersListMetaDataModel] = Body(title='Meta')

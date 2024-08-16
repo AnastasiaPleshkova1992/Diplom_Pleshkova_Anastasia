@@ -1,3 +1,6 @@
+from typing import List
+
+from fastapi import Body
 from pydantic import BaseModel, Field
 
 from src.pagination import PaginatedMetaDataModel
@@ -40,9 +43,9 @@ class UsersListElementModel(BaseModel):
 
 
 class UsersListMetaDataModel(BaseModel):
-    pagination: PaginatedMetaDataModel
+    pagination: PaginatedMetaDataModel = Body(...)
 
 
 class UsersListResponseModel(BaseModel):
-    data: UsersListElementModel = Field(title='Data')
-    meta: UsersListMetaDataModel
+    data: List[UsersListElementModel] = Body(...)
+    meta: List[UsersListMetaDataModel] = Body(...)
