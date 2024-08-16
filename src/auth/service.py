@@ -1,7 +1,5 @@
 from datetime import datetime, timedelta, timezone
-from typing import Optional
 
-from fastapi import HTTPException, status
 from jose import jwt
 from passlib.context import CryptContext
 from sqlalchemy import select
@@ -9,7 +7,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src import User
 from src.config import get_auth_data
-from src.exeptions import ErrorResponseModel
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

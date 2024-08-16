@@ -3,6 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src import db_helper
 from src.admin.service import get_users
+from src.exeptions import ErrorResponseModel, CodelessErrorResponseModel
 
 # from src.pagination import PaginatedMetaDataModel
 from src.users.schemas import (
@@ -21,14 +22,8 @@ router = APIRouter(prefix="/users", tags=["user"])
     summary="Получение данных о текущем пользователе",
     response_model=CurrentUserResponseModel,
     responses={
-        400: {
-            "description": "Bad Request",
-            "content": {"application/json": {"schema": {"type": "string"}}},
-        },
-        401: {
-            "description": "Unauthorized",
-            "content": {"application/json": {"schema": {}}},
-        },
+        400: {"model": ErrorResponseModel},
+        401: {"model": CodelessErrorResponseModel},
     },
 )
 async def current_user(
@@ -44,18 +39,9 @@ async def current_user(
     summary="Изменение данных пользователя",
     response_model=UpdateUserResponseModel,
     responses={
-        400: {
-            "description": "Bad Request",
-            "content": {"application/json": {"schema": {}}},
-        },
-        401: {
-            "description": "Unauthorized",
-            "content": {"application/json": {"schema": {}}},
-        },
-        404: {
-            "description": "Not Found",
-            "content": {"application/json": {"schema": {}}},
-        },
+        400: {"model": ErrorResponseModel},
+        401: {"model": CodelessErrorResponseModel},
+        404: {"model": CodelessErrorResponseModel},
     },
 )
 async def edit_user(
@@ -73,14 +59,8 @@ async def edit_user(
     # response_model=UsersListResponseModel,
     summary="Постраничное получение кратких данных обо всех пользователях",
     responses={
-        400: {
-            "description": "Bad Request",
-            "content": {"application/json": {"schema": {}}},
-        },
-        401: {
-            "description": "Unauthorized",
-            "content": {"application/json": {"schema": {}}},
-        },
+        400: {"model": ErrorResponseModel},
+        401: {"model": CodelessErrorResponseModel},
     },
 )
 async def users(

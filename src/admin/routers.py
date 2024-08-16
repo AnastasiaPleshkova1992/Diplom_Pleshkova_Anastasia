@@ -17,6 +17,7 @@ from src.admin.service import (
     get_cities,
     get_current_admin_user,
 )
+from src.exeptions import ErrorResponseModel, CodelessErrorResponseModel
 from src.users.service import get_user_by_id
 
 router = APIRouter(prefix="/private/users", tags=["admin"])
@@ -26,18 +27,9 @@ router = APIRouter(prefix="/private/users", tags=["admin"])
     "",
     summary="Постраничное получение кратких данных обо всех пользователях",
     responses={
-        400: {
-            "description": "Bad Request",
-            "content": {"application/json": {"schema": {}}},
-        },
-        401: {
-            "description": "Unauthorized",
-            "content": {"application/json": {"schema": {}}},
-        },
-        403: {
-            "description": "Forbidden",
-            "content": {"application/json": {"schema": {}}},
-        },
+        400: {"model": ErrorResponseModel},
+        401: {"model": CodelessErrorResponseModel},
+        403: {"model": CodelessErrorResponseModel},
     },
     # response_model=PrivateUsersListResponseModel
 )
@@ -65,18 +57,9 @@ async def private_users_get(
     response_model=PrivateDetailUserResponseModel,
     status_code=201,
     responses={
-        400: {
-            "description": "Bad Request",
-            "content": {"application/json": {"schema": {}}},
-        },
-        401: {
-            "description": "Unauthorized",
-            "content": {"application/json": {"schema": {}}},
-        },
-        403: {
-            "description": "Forbidden",
-            "content": {"application/json": {"schema": {}}},
-        },
+        400: {"model": ErrorResponseModel},
+        401: {"model": CodelessErrorResponseModel},
+        403: {"model": CodelessErrorResponseModel},
     },
 )
 async def private_users_post(
@@ -94,22 +77,10 @@ async def private_users_post(
     summary="Детальное получение информации о пользователе",
     response_model=PrivateDetailUserResponseModel,
     responses={
-        400: {
-            "description": "Bad Request",
-            "content": {"application/json": {"schema": {}}},
-        },
-        401: {
-            "description": "Unauthorized",
-            "content": {"application/json": {"schema": {}}},
-        },
-        403: {
-            "description": "Forbidden",
-            "content": {"application/json": {"schema": {}}},
-        },
-        404: {
-            "description": "Not Found",
-            "content": {"application/json": {"schema": {}}},
-        },
+        400: {"model": ErrorResponseModel},
+        401: {"model": CodelessErrorResponseModel},
+        403: {"model": CodelessErrorResponseModel},
+        404: {"model": CodelessErrorResponseModel},
     },
 )
 async def private_users__pk__get(
@@ -128,14 +99,8 @@ async def private_users__pk__get(
     summary="Удаление пользователя",
     status_code=204,
     responses={
-        401: {
-            "description": "Unauthorized",
-            "content": {"application/json": {"schema": {}}},
-        },
-        403: {
-            "description": "Forbidden",
-            "content": {"application/json": {"schema": {}}},
-        },
+        401: {"model": CodelessErrorResponseModel},
+        403: {"model": CodelessErrorResponseModel},
     },
 )
 async def private_users__pk__delete(
@@ -155,22 +120,10 @@ async def private_users__pk__delete(
     summary="Изменение информации о пользователе",
     response_model=PrivateDetailUserResponseModel,
     responses={
-        400: {
-            "description": "Bad Request",
-            "content": {"application/json": {"schema": {}}},
-        },
-        401: {
-            "description": "Unauthorized",
-            "content": {"application/json": {"schema": {}}},
-        },
-        403: {
-            "description": "Forbidden",
-            "content": {"application/json": {"schema": {}}},
-        },
-        404: {
-            "description": "Not Found",
-            "content": {"application/json": {"schema": {}}},
-        },
+        400: {"model": ErrorResponseModel},
+        401: {"model": CodelessErrorResponseModel},
+        403: {"model": CodelessErrorResponseModel},
+        404: {"model": CodelessErrorResponseModel},
     },
 )
 async def private_users__pk__patch(

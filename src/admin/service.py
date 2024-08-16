@@ -1,11 +1,11 @@
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.exeptions import CodelessErrorResponseModel
+from src.exeptions import ExceptionResponseModel
 from src.users.models import User, City
 from src.admin.schemas import PrivateCreateUserModel, PrivateUpdateUserModel
 from src.users.service import get_user_by_id
-from fastapi import Request, HTTPException, status
+from fastapi import Request
 
 from src.users.service import get_current_user
 
@@ -14,7 +14,7 @@ async def get_current_admin_user(session: AsyncSession, request: Request):
     current_user = await get_current_user(session, request)
     if current_user.is_admin:
         return current_user.is_admin
-    raise CodelessErrorResponseModel(code=403, message="Administrator only")
+    raise ExceptionResponseModel(code=403, message="Administrator only")
 
 
 async def get_users(session: AsyncSession, page: int, size: int):
@@ -46,9 +46,7 @@ async def update_user(
         await session.commit()
     except Exception as e:
         print(e)
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid data"
-        )
+        raise ExceptionResponseModel(code=400, message="Invalid data")
     result = await get_user_by_id(session, pk)
     return result
 
