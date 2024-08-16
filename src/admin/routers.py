@@ -1,9 +1,8 @@
 from fastapi import APIRouter, Depends, Request
-from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.annotation import Annotated
 
-from src import db_helper, User
+from src import db_helper
 from src.admin.schemas import (
     PrivateCreateUserModel,
     PrivateDetailUserResponseModel,
@@ -18,7 +17,6 @@ from src.admin.service import (
     get_cities,
     get_current_admin_user,
 )
-from src.pagination import PaginatedMetaDataModel
 from src.users.service import get_user_by_id
 
 router = APIRouter(prefix="/private/users", tags=["admin"])
@@ -27,24 +25,38 @@ router = APIRouter(prefix="/private/users", tags=["admin"])
 @router.get(
     "",
     summary="Постраничное получение кратких данных обо всех пользователях",
-    status_code=200,
+    responses={
+        400: {
+            "description": "Bad Request",
+            "content": {"application/json": {"schema": {}}},
+        },
+        401: {
+            "description": "Unauthorized",
+            "content": {"application/json": {"schema": {}}},
+        },
+        403: {
+            "description": "Forbidden",
+            "content": {"application/json": {"schema": {}}},
+        },
+    },
+    # response_model=PrivateUsersListResponseModel
 )
-# response_model=PrivateUsersListResponseModel)
 async def private_users_get(
     page: int,
     size: int,
     session: AsyncSession = Depends(db_helper.session_getter),
     request: Request = Request,
-): #Добавить -> PrivateUsersListResponseModel если получится реализовать
+):
     """Здесь находится вся информация, доступная пользователю о других пользователях"""
     await get_current_admin_user(session=session, request=request)
     users_list = await get_users(session=session, page=page, size=size)
     cities_list = await get_cities(session=session)
     total = len(users_list)
     pagination = {"total": total, "page": page, "size": size}
-    return {"data": users_list,
-            "meta": {"pagination": pagination,
-                     "hint": {"city": cities_list}}}
+    return {
+        "data": users_list,
+        "meta": {"pagination": pagination, "hint": {"city": cities_list}},
+    }
 
 
 @router.post(
@@ -52,6 +64,20 @@ async def private_users_get(
     summary="Создание пользователя",
     response_model=PrivateDetailUserResponseModel,
     status_code=201,
+    responses={
+        400: {
+            "description": "Bad Request",
+            "content": {"application/json": {"schema": {}}},
+        },
+        401: {
+            "description": "Unauthorized",
+            "content": {"application/json": {"schema": {}}},
+        },
+        403: {
+            "description": "Forbidden",
+            "content": {"application/json": {"schema": {}}},
+        },
+    },
 )
 async def private_users_post(
     user_create: PrivateCreateUserModel = Annotated[Depends(get_current_admin_user)],
@@ -67,7 +93,24 @@ async def private_users_post(
     "/{pk}",
     summary="Детальное получение информации о пользователе",
     response_model=PrivateDetailUserResponseModel,
-    status_code=200,
+    responses={
+        400: {
+            "description": "Bad Request",
+            "content": {"application/json": {"schema": {}}},
+        },
+        401: {
+            "description": "Unauthorized",
+            "content": {"application/json": {"schema": {}}},
+        },
+        403: {
+            "description": "Forbidden",
+            "content": {"application/json": {"schema": {}}},
+        },
+        404: {
+            "description": "Not Found",
+            "content": {"application/json": {"schema": {}}},
+        },
+    },
 )
 async def private_users__pk__get(
     pk: int,
@@ -80,7 +123,21 @@ async def private_users__pk__get(
     return user
 
 
-@router.delete("/{pk}", summary="Удаление пользователя", status_code=204)
+@router.delete(
+    "/{pk}",
+    summary="Удаление пользователя",
+    status_code=204,
+    responses={
+        401: {
+            "description": "Unauthorized",
+            "content": {"application/json": {"schema": {}}},
+        },
+        403: {
+            "description": "Forbidden",
+            "content": {"application/json": {"schema": {}}},
+        },
+    },
+)
 async def private_users__pk__delete(
     pk: int,
     session: AsyncSession = Depends(db_helper.session_getter),
@@ -97,7 +154,24 @@ async def private_users__pk__delete(
     "/{pk}",
     summary="Изменение информации о пользователе",
     response_model=PrivateDetailUserResponseModel,
-    status_code=200,
+    responses={
+        400: {
+            "description": "Bad Request",
+            "content": {"application/json": {"schema": {}}},
+        },
+        401: {
+            "description": "Unauthorized",
+            "content": {"application/json": {"schema": {}}},
+        },
+        403: {
+            "description": "Forbidden",
+            "content": {"application/json": {"schema": {}}},
+        },
+        404: {
+            "description": "Not Found",
+            "content": {"application/json": {"schema": {}}},
+        },
+    },
 )
 async def private_users__pk__patch(
     pk: int,

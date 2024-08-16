@@ -1,6 +1,7 @@
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.exeptions import CodelessErrorResponseModel
 from src.users.models import User, City
 from src.admin.schemas import PrivateCreateUserModel, PrivateUpdateUserModel
 from src.users.service import get_user_by_id
@@ -13,15 +14,13 @@ async def get_current_admin_user(session: AsyncSession, request: Request):
     current_user = await get_current_user(session, request)
     if current_user.is_admin:
         return current_user.is_admin
-    raise HTTPException(
-        status_code=status.HTTP_403_FORBIDDEN, detail="Недостаточно прав!"
-    )
+    raise CodelessErrorResponseModel(code=403, message="Administrator only")
 
 
 async def get_users(session: AsyncSession, page: int, size: int):
     query = select(User)
     users = await session.execute(query)
-    return users.scalars().all()[page: size + page]
+    return users.scalars().all()[page : size + page]
 
 
 async def get_cities(session: AsyncSession):
