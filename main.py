@@ -2,7 +2,6 @@ from contextlib import asynccontextmanager
 
 import uvicorn
 from fastapi import FastAPI, Request
-from fastapi_pagination import add_pagination
 from starlette.responses import JSONResponse
 
 from src.database import db_helper
@@ -26,8 +25,6 @@ main_app = FastAPI(**settings.model_dump(), lifespan=lifespan)
 main_app.include_router(auth_router)
 main_app.include_router(users_router)
 main_app.include_router(admin_router)
-
-add_pagination(main_app)
 
 
 @main_app.exception_handler(ExceptionResponseModel)
