@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, Field
 
 from src.pagination import PaginatedMetaDataModel
 
@@ -40,9 +40,9 @@ class UsersListElementModel(BaseModel):
 
 
 class UsersListMetaDataModel(BaseModel):
-    pagination: PaginatedMetaDataModel | None
+    pagination: PaginatedMetaDataModel
 
 
 class UsersListResponseModel(BaseModel):
-    data: UsersListElementModel | None = Field(title='Data')
-    meta: UsersListMetaDataModel | None
+    data: UsersListElementModel = Field(title='Data')
+    meta: UsersListMetaDataModel

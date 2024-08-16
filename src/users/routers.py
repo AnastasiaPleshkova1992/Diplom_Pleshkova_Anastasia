@@ -1,14 +1,15 @@
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src import db_helper, User
+from src import db_helper
 from src.admin.service import get_users
-from src.pagination import PaginatedMetaDataModel
+
+# from src.pagination import PaginatedMetaDataModel
 from src.users.schemas import (
     CurrentUserResponseModel,
     UpdateUserResponseModel,
     UpdateUserModel,
-    UsersListResponseModel,
+    # UsersListResponseModel,
 )
 from src.users.service import get_current_user, update_user
 
@@ -19,7 +20,16 @@ router = APIRouter(prefix="/users", tags=["user"])
     "/current",
     summary="Получение данных о текущем пользователе",
     response_model=CurrentUserResponseModel,
-    status_code=200,
+    responses={
+        400: {
+            "description": "Bad Request",
+            "content": {"application/json": {"schema": {"type": "string"}}},
+        },
+        401: {
+            "description": "Unauthorized",
+            "content": {"application/json": {"schema": {}}},
+        },
+    },
 )
 async def current_user(
     request: Request, session: AsyncSession = Depends(db_helper.session_getter)
@@ -33,7 +43,20 @@ async def current_user(
     "/current",
     summary="Изменение данных пользователя",
     response_model=UpdateUserResponseModel,
-    status_code=200,
+    responses={
+        400: {
+            "description": "Bad Request",
+            "content": {"application/json": {"schema": {}}},
+        },
+        401: {
+            "description": "Unauthorized",
+            "content": {"application/json": {"schema": {}}},
+        },
+        404: {
+            "description": "Not Found",
+            "content": {"application/json": {"schema": {}}},
+        },
+    },
 )
 async def edit_user(
     request: Request,
@@ -49,14 +72,26 @@ async def edit_user(
     "",
     # response_model=UsersListResponseModel,
     summary="Постраничное получение кратких данных обо всех пользователях",
-    status_code=200,
+    responses={
+        400: {
+            "description": "Bad Request",
+            "content": {"application/json": {"schema": {}}},
+        },
+        401: {
+            "description": "Unauthorized",
+            "content": {"application/json": {"schema": {}}},
+        },
+    },
 )
 async def users(
-    page: int, size: int, session: AsyncSession = Depends(db_helper.session_getter)
+    request: Request,
+    page: int,
+    size: int,
+    session: AsyncSession = Depends(db_helper.session_getter),
 ):
     """Здесь находится вся информация, доступная пользователю о других пользователях"""
+    await get_current_user(session=session, request=request)
     users_list = await get_users(session=session, page=page, size=size)
     total = len(users_list)
     pagination = {"total": total, "page": page, "size": size}
-    return {"data": users_list,
-            "meta": {"pagination": pagination}}
+    return {"data": users_list, "meta": {"pagination": pagination}}
