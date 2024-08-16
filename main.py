@@ -7,7 +7,7 @@ from starlette.responses import JSONResponse
 
 from src.database import db_helper
 from src.config import settings
-from src.exeptions import ErrorResponseModel, CodelessErrorResponseModel
+from src.exeptions import ExceptionResponseModel
 from src.users.routers import router as users_router
 from src.admin.routers import router as admin_router
 from src.auth.routers import router as auth_router
@@ -30,16 +30,8 @@ main_app.include_router(admin_router)
 add_pagination(main_app)
 
 
-@main_app.exception_handler(ErrorResponseModel)
-async def error_response_exception_handler(request: Request, exc: ErrorResponseModel):
-    return JSONResponse(
-        status_code=exc.code,
-        content={"code": exc.code, "message": exc.message},
-    )
-
-
-@main_app.exception_handler(CodelessErrorResponseModel)
-async def codeless_error_exception_handler(request: Request, exc: CodelessErrorResponseModel):
+@main_app.exception_handler(ExceptionResponseModel)
+async def response_exception_handler(request: Request, exc: ExceptionResponseModel):
     return JSONResponse(
         status_code=exc.code,
         content={"code": exc.code, "message": exc.message},
