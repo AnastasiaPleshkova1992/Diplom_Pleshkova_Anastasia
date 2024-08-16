@@ -27,7 +27,7 @@ services:
     ports:
       - "8000:8000"
     restart: on-failure
-    command: sh -c "fastapi run main.py --port 8000" && alembic upgrade head"
+    command: sh -c "alembic upgrade head && fastapi run main.py --port 8000"
     depends_on:
       db:
         condition: service_healthy
