@@ -1,13 +1,36 @@
 from fastapi import APIRouter, Response, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src import db_helper
+from src import db_helper, User
 from src.auth.schemas import LoginModel
-from src.auth.service import authenticate_user, create_access_token
+from src.auth.service import (
+    authenticate_user,
+    create_access_token,
+    get_user_by_login,
+    get_password_hash,
+)
 from src.exeptions import ErrorResponseModel, ExceptionResponseModel
 from src.users.schemas import CurrentUserResponseModel
 
 router = APIRouter(tags=["Auth"])
+
+
+@router.post(
+    "/register",
+    summary="Регистрация нового пользователя",
+    response_model=dict,
+    responses={400: {"model": ErrorResponseModel}},
+)
+async def register_user(
+    user_data: LoginModel, session: AsyncSession = Depends(db_helper.session_getter)
+) -> dict:
+    user = await get_user_by_login(login=user_data.login, session=session)
+    if user:
+        raise ExceptionResponseModel(code=400, message="User already exists")
+    user_dict = user_data.dict()
+    user_dict["password"] = get_password_hash(user_data.password)
+    session.add(User(**user_dict))
+    return {"message": "You have successfully registered!"}
 
 
 @router.post(
