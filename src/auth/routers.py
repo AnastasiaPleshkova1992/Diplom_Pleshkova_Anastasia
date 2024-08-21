@@ -30,6 +30,7 @@ async def register_user(
     user_dict = user_data.dict()
     user_dict["password"] = get_password_hash(user_data.password)
     session.add(User(**user_dict))
+    await session.commit()
     return {"message": "You have successfully registered!"}
 
 
