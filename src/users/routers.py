@@ -5,7 +5,6 @@ from src import db_helper
 from src.admin.service import get_users
 from src.exeptions import ErrorResponseModel, CodelessErrorResponseModel
 
-# from src.pagination import PaginatedMetaDataModel
 from src.users.schemas import (
     CurrentUserResponseModel,
     UpdateUserResponseModel,
